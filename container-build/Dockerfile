@@ -5,9 +5,6 @@ FROM registry.access.redhat.com/ubi8/ubi:8.0
 MAINTAINER Red Hat Training <training@redhat.com>
 
 
-
-
-
 ENV DOCROOT=/var/www/html 
 
 
@@ -19,29 +16,17 @@ RUN   yum install -y --disableplugin=subscription-manager httpd && \
       echo "Hello from the httpd-parent container!" > ${DOCROOT}/index.html
 
 
-
-
-
 ONBUILD COPY src/ ${DOCROOT}/ 
 
 
+EXPOSE 8080
 
-EXPOSE 80
-
-
-
-
-
-RUN rm -rf /run/httpd && mkdir /run/httpd
+RUN rm -rf /run/httpd && mkdir /run/httpd && \
+    chgrp -R 0 ${DOCROOT}/ && \
+    chmod -R g=u ${DOCROOT}/ 
 
 
-
-
-
-USER root 
-
-
-
+USER 1001 
 
 
 CMD /usr/sbin/httpd -DFOREGROUND
