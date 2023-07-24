@@ -27,6 +27,8 @@ RUN rm -rf /run/httpd && mkdir /run/httpd && \
     chgrp -R 0 /run/httpd/ && \
     chmod -R g=u /run/httpd/ 
 
+RUN sed -i "s/Listen 80/Listen 8080/g" /etc/httpd/conf/httpd.conf && \
+    sed -i "s/#ServerName www.example.com:80/ServerName 0.0.0.0:8080/g"  /etc/httpd/conf/httpd.conf
 
 USER 1001 
 
